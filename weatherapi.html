@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #body{
+            height: 100vh;
+            background-size: 100% 100%;
+        }
+        *{
+            margin: 0px;
+        }
+       
+    </style>
+</head>
+<body>
+    <div id="body">
+    <h1 id="heading">Weather Report</h1>
+    <h1 id="scity">Select the City:</h1>
+    <select id="dropdown">
+        <option value=""></option>
+        <option value="Chennai">Chennai</option>
+        <option value="Los Angeles">Los Angeles</option>
+        <option value="Johannesburg">Johannesburg</option>
+        <option value="Dubai">Dubai</option>
+        <option value="Delhi">Delhi
+        </option>
+        <option value="London">London</option>
+    </select>
+</div>
+
+    <script >
+        var dropdown=document.getElementById("dropdown");
+
+dropdown.addEventListener("change",function(){
+    var body=document.getElementById("body");
+    var vdropdown=dropdown.value;
+
+    if(vdropdown=="Chennai"){
+        body.style.backgroundImage="url('https://upload.wikimedia.org/wikipedia/commons/3/32/Chennai_Central.jpg')";
+    }
+    else if(vdropdown=="Los Angeles"){
+        body.style.backgroundImage="url('https://www.online-getaway.com/images/headers/north-america/usa/california/los-angeles/los-angeles.jpg')";
+    }
+    else if(vdropdown=="Johannesburg"){
+        body.style.backgroundImage="url('https://i.ytimg.com/vi/PnJKV9vSvQQ/hq720.jpg?sqp=-oaymwEhCK4FEIIDSFryq4qpAxMIARUAAAAAGAElAADIQj0AgKJD&rs=AOn4CLCoKHjXYg_KTBRfeThVicmdl3rQBg')";
+    }
+    else if(vdropdown=="Dubai"){
+        body.style.backgroundImage="url('https://i.ytimg.com/vi/14p96ME7hMk/maxresdefault.jpg')";  
+    }
+    else if(vdropdown=="Delhi"){
+        body.style.backgroundImage="url('https://cdn.pixabay.com/photo/2020/02/02/17/24/travel-4813658_640.jpg')";   
+    }
+    else if(vdropdown=="London"){
+        body.style.backgroundImage="url('https://thumbs.dreamstime.com/b/tower-bridge-london-uk-38138737.jpg')";
+    }
+
+    async function checkweather() {
+        var vdropdown=document.getElementById("dropdown").value;
+        var cityname=vdropdown;
+        var apikey="36c5a67ce77c79c3332fcd0e5b7e5af3";
+        var response=await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${cityname}&appid=${apikey}`);
+        return response;
+    }
+
+    checkweather()
+    .then((data)=>{
+        
+        return data.json();
+    })
+    .then((data1)=>{
+        var existingcontent = document.querySelector("#display");
+        if(existingcontent){
+            existingcontent.remove();
+        }
+
+        var existingimg = document.querySelector(".displayimg");
+        if(existingimg){
+            existingimg.remove();
+        }
+
+        var weather="The Weather of "+vdropdown+" is "  +Math.floor(data1.main.temp -273.15)+"°C.";
+        var para=document.createElement("h1");
+        body.appendChild(para);
+        para.id="display";
+        para.textContent=weather;
+
+        var temperature=Math.floor(data1.main.temp -273.15);
+        console.log(temperature)
+        if(temperature>20){
+            var sunny=document.createElement("img");
+            body.appendChild(sunny);
+            sunny.src="https://media.istockphoto.com/id/824800468/photo/sun-on-blue-sky-with-clouds.jpg?s=612x612&w=0&k=20&c=1XKIS7ggyyhj2oCZQluzIV579pkCBHq_-h9Vo4yNTmc=";
+            sunny.className="displayimg";
+            sunny.height="150";
+            sunny.width="300";
+            sunny.style.position="relative";
+            sunny.style.left="1200px";
+            sunny.style.bottom="130px";
+        }
+
+        if(temperature<20){
+            var snowy=document.createElement("img");
+            body.appendChild(snowy);
+            snowy.src="https://media.istockphoto.com/id/868098786/photo/thermometer-on-snow-shows-low-temperatures-zero-low-temperatures-in-degrees-celsius-and.jpg?s=612x612&w=0&k=20&c=jOZH4RSlX29thO6GNlvTUlYKUo_DK4xVxvXUTK7Jw5s=";
+            snowy.className="displayimg";
+            snowy.height="150";
+            snowy.width="300";
+            snowy.style.position="relative";
+            snowy.style.left="1200px";
+            snowy.style.bottom="130px";
+        }
+    })
+    .catch((err)=>{
+        console.log(err);
+    });
+})
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
